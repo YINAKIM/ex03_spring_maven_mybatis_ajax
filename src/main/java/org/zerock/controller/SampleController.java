@@ -1,14 +1,17 @@
 package org.zerock.controller;
 
 import lombok.extern.log4j.Log4j;
-import org.apache.commons.fileupload.util.LimitedInputStream;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.zerock.domain.SampleVO;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -44,7 +47,7 @@ public class SampleController {
 
 
 
-    //컬렉션 타입의 객체 반환
+    //컬렉션 타입의 객체 반환 - List<E>
     @GetMapping(value = "/getList")
     public List<SampleVO> getList(){
         return IntStream.range(1,10)
@@ -79,6 +82,74 @@ public class SampleController {
          */
     }
 
+    //컬렉션 타입의 객체 반환 - Map
+    @GetMapping(value = "getMap")
+    public Map<String, SampleVO> getMap(){
+        Map<String, SampleVO> map = new HashMap<>();
+        map.put("First",new SampleVO(111,"그루트","주니어"));
+        //      < 키값은 String, new SampleVO 가 value >
+        return map;
+        /*
+        * 요청 : /sample/getMap.json
+        * {"First":{"mno":111,"firstName":"그루트","lastName":"주니어"}}
+        *
+        *  요청 : /sample/getMap
+        *   여기서 Key값은 XML로 변환되는 경우 태그의 이름이 된다. 반드시! String으로 지정할 것! ==> Map<String, Object>
+        * <Map>
+            <First>
+            <mno>111</mno>
+            <firstName>그루트</firstName>
+            <lastName>주니어</lastName>
+            </First>
+          </Map>
+        * */
 
+    }
+
+
+
+
+    /* REST방식 호출에서 화면자체가 아니라 데이터 자체를 전송하는 방식으로 처리된다.
+       => 요청한 쪽에서는 정상적인 데이터인지 비정상데이터인지 구분할 수 잇는 확실한 방법을 제공해야한다.
+       그 방법이 ===> HTTP헤더의 [상태코드 + 에러메시지]를 같이 전달 : ResponseEntity
+    */
+    @GetMapping(value = "/check",params = {"height","weight"})
+    public ResponseEntity<SampleVO> check(Double height, Double weight){
+        SampleVO vo = new SampleVO(0," "+height," "+weight);
+        ResponseEntity<SampleVO> result =  null;
+
+        if(height < 150){
+            result = ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(vo);    // 상태메시지 "BAD_GATEWAY" 담아보냄
+                                           // 502 에러 : 서버가 게이트웨이나 프록시 서버 역할을 하면서
+                                          //            업스트림 서버로부터 유효하지 않은 응답을 받았다는 것
+            /*
+              General
+              Request URL: http://localhost:8004/sample/check?height=140&weight=60
+                           http://localhost:8004/sample/check.json?height=140&weight=60
+
+              Request Method: GET
+              Status Code: 502
+
+              Response Header
+              Content-Type: application/xhtml+xml;charset=UTF-8 --> xml로 요청
+              Content-Type: application/json;charset=UTF-8 --> json으로 요청 했을 때
+            */
+        }else{
+            result = ResponseEntity.status(HttpStatus.OK).body(vo);    // 상태메시지 "OK" 담아보냄
+                                          // 200 OK
+                                            // .body(vo) : 결과데이터를 body에 담아 리턴
+            /*
+            General
+            Request URL: http://localhost:8004/sample/check.json?height=160&weight=60
+            Request Method: GET
+            Status Code: 200
+            */
+        }
+
+        return result;
+    }
+
+
+    //@RestController의 파라미터
 
 }
