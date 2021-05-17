@@ -15,21 +15,21 @@
         <level value="info" />
     </logger>
 
-    <!-- 3rdparty Loggers -->
+    <!-- 3rd-party Loggers (외부dependency) -->
     <logger name="org.springframework.core">
-        <level value="ERROR" />
+        <level value="info" />
     </logger>
 
     <logger name="org.springframework.beans">
-        <level value="ERROR" />
+        <level value="info" />
     </logger>
 
     <logger name="org.springframework.context">
-        <level value="ERROR" />
+        <level value="info" />
     </logger>
 
     <logger name="org.springframework.web">
-        <level value="ERROR" />
+        <level value="info" />
     </logger>
 
 

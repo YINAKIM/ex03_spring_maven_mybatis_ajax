@@ -1,3 +1,4 @@
 org/zerock/controller/SampleController.class
 org/zerock/mapper/TimeMapper.class
 org/zerock/domain/SampleVO.class
+org/zerock/Ticket.class

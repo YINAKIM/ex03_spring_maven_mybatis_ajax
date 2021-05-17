@@ -1,12 +1,12 @@
 package org.zerock.controller;
 
+import jdk.nashorn.internal.runtime.regexp.joni.constants.internal.TargetInfo;
 import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.zerock.Ticket;
 import org.zerock.domain.SampleVO;
 
 import java.util.HashMap;
@@ -150,6 +150,32 @@ public class SampleController {
     }
 
 
-    //@RestController의 파라미터
+    // @RestController의 파라미터
+    @GetMapping("/product/{cat}/{pid}")     //  쿼리스트링 ?뒤에 변수들이 아니라 URL자체에 데이터를 식별할 수 있는 정보들을 표현
+    public String[] getPath( @PathVariable("cat") String cat, @PathVariable("pid") String pid){
+        //@PathVariable로 파라미터 지정 ==> {변수명}
+
+        return new String[] {"category : "+cat, "productId : "+pid};
+        /*
+        요청 : /sample/product/coffee/123
+
+        <Strings>
+            <item>category : coffee</item>
+            <item>productId : 123</item>
+        </Strings>
+
+        json 요청 : /sample/product/coffee/123.json
+        ["category : coffee","productId : 123"]
+
+        */
+    }
+
+
+    // @RequestBody : 전달된 요청 내용을 이용해서 해당 파라미터의 타입으로 변환 요구 / 대부분json형태를 서버에 보내서 원하는 타입의객체로 변환,
+    @PostMapping("/ticket")
+    public Ticket convert(@RequestBody Ticket ticket){
+        log.info("convert.................ticket:"+ticket);
+        return ticket;
+    }// REST방식의 테스트로 진행 : SampleControllerTests.java 의 ---> testConvert() 에 테스트흐름,결과 정리해둠
 
 }
