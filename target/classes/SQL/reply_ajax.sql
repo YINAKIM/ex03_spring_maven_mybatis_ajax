@@ -21,7 +21,7 @@ FOREIGN KEY (BNO) REFERENCES TBL_BOARD(BNO);
 
 
 --확인
-select * from TBL_REPLY where BNO=425997;
+select * from TBL_REPLY where BNO=425999;
 
 commit ;
 

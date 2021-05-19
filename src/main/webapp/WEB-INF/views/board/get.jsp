@@ -54,11 +54,12 @@
 
                         var bnoValue = '<c:out value="${board.bno}"/>';
 
-                        // replyService 의 add함수 테스트
+                        // [1] replyService Obj에서 add함수 테스트
+                        // 이걸쓰면 왜좋은지? get.jsp내부에서는 Ajax 호출은 replyService라는 이름의 js객체에 감춰져있음 -> 필요한 파라미터만 전달하는 형태로 간결해짐
                         replyService.add(
                             {
-                                reply:"JS test"
-                                ,replyer:"tester"
+                                reply:"add로 들어가는댓글"
+                                ,replyer:"addadd"
                                 ,bno:bnoValue
                             },
                             function(result){
@@ -66,8 +67,32 @@
                             }
                         );
 
-                    // 이걸쓰면 왜좋은지? get.jsp내부에서는 Ajax 호출은 replyService라는 이름의 js객체에 감춰져있음 -> 필요한 파라미터만 전달하는 형태로 간결해짐
-                    //
+                        console.log("글번호 : "+bnoValue);
+
+                        // [2] replyService Obj에서 댓글목록을 출력하는 getList
+                        replyService.getList(
+                            {bno:bnoValue, page:1}
+                            ,function(list){
+                                for(var i = 0, len = list.length || 0 ; i<len ; i++){
+                                    console.log(list[i]);
+                                }
+                            }
+                        ); //replyService.getList
+                            console.log("getList지남  : ");
+
+                        // [3] replyService Obj에서 댓글을 삭제하는 remove
+                        replyService.remove(
+                             18 // rno=18로 테스트
+                            ,function(count){
+                                console.log(count);
+                                if(count=="success"){alert("------REMOVED------")}
+                            }
+                            ,function(err){
+                                alert("------REMOVE ERROR------");
+                            }
+                        );//replyService.remove
+
+
                     });
                 </script>
 

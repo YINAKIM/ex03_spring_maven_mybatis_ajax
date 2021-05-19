@@ -84,8 +84,8 @@ public class ReplyMapperTests {
     // 삭제테스트
     @Test
     public void testDelete(){
-        Long targetRno = 10L;
-        log.info(mapper.read(10L));
+        Long targetRno = 17L;
+        log.info(mapper.read(17L));
         mapper.delete(targetRno);
     }
 

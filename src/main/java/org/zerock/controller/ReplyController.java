@@ -66,23 +66,21 @@ public class ReplyController {
 
     }
 
+    /********************************************************************************************/
     //{rno}받아서 댓글 삭제 --> 똑같이 "/{rno}"로 요청들어오는데 삭제할 수 있는 이유?
 
-    /*******************************************************/
-     //{rno}받아서 댓글 하나 조회
-
     @GetMapping(value = "/{rno}",
-            produces = {MediaType.APPLICATION_XML_VALUE,
-                    MediaType.APPLICATION_JSON_VALUE})
+            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ReplyVO> get(@PathVariable("rno") Long rno){
-        log.info("get: "+rno);
+        log.info("getMapping으로 들어옴 ---------- get: "+rno);
 
         return new ResponseEntity<>(service.get(rno),HttpStatus.OK);
 
     }
+
    @DeleteMapping(value = "/{rno}",produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> remove(@PathVariable("rno")Long rno){
-        log.info("remove : "+rno);
+        log.info("DeleteMapping으로 들어옴 ------------ remove : "+rno);
 
         //삼항연산자 이용
         return service.remove(rno)==1
@@ -93,7 +91,7 @@ public class ReplyController {
      /************************ @GetMapping 이랑 @DeleteMapping 다시보기 *******************************/
 
      @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH}
-             ,value = "/modi/{rno}"
+             ,value = "/{rno}"
              ,consumes = "application/json",produces = {MediaType.TEXT_PLAIN_VALUE})
      public ResponseEntity<String> modify(
             @RequestBody ReplyVO vo, @PathVariable("rno") Long rno){
