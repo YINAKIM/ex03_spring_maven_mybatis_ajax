@@ -81,7 +81,7 @@
                             console.log("getList지남  : ");
 
                         // [3] replyService Obj에서 댓글을 삭제하는 remove
-                        replyService.remove(
+                       /* replyService.remove(
                              18 // rno=18로 테스트
                             ,function(count){
                                 console.log(count);
@@ -91,7 +91,17 @@
                                 alert("------REMOVE ERROR------");
                             }
                         );//replyService.remove
+*/
 
+                        //[4] replyService Obj에서 댓글을 수정하는 update
+                        replyService.update({
+                             rno : 20
+                            ,bno : bnoValue
+                            ,reply : "replyService의 update로 댓글수정"
+                            }
+                            ,function(result){alert("update로 댓글수정 완료")}
+
+                        );//replyService.update
 
                     });
                 </script>

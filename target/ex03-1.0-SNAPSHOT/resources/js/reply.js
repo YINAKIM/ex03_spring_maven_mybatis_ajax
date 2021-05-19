@@ -8,7 +8,7 @@ console.log("Reply Module...............!!!!");
 
 // ajax를 이용해서 POST방식으로 호출하는 add함수
 var replyService = (function(){
-    // replyService가 받을 함수들 : add, getList, remove
+    // replyService가 받을 함수들 : add, getList, remove,update
 
     //[1] 댓글추가
     function add(reply, callback, error){
@@ -41,21 +41,21 @@ var replyService = (function(){
         var bno = param.bno;
         var page = param.page || 1; // js에서 ||, &&는 bool타입이 아니고 값자체를 리턴한다.
                                     // ||는 하나라도 true면 true"값" 반환, &&는 하나라도 false면 false 값 반환
-                                    /*
-                                       [ js의 falsey value : 이 값이면 전부 false --> 이 값이 아니면 전부 true로 간주]
-                                           false, 0, -0, 0n, ""(빈String), null, undefined, NaN
+                /*
+                   [ js의 falsey value : 이 값이면 전부 false --> 이 값이 아니면 전부 true로 간주]
+                       false, 0, -0, 0n, ""(빈String), null, undefined, NaN
 
-                                           *NaN : 숫자가 아니라는 뜻인데, 연산결과가 잘못될 경우 NaN이라고 인식하기도 함
-                                           1. 숫자로서 읽을 수 없음 (parseInt("어쩌구"), Number(undefined))
-                                            2. 결과가 허수인 수학 계산식 (Math.sqrt(-1))
-                                            3. 피연산자가 NaN (7 ** NaN)
-                                            4. 정의할 수 없는 계산식 (0 * Infinity)
-                                            5. 문자열을 포함하면서 덧셈이 아닌 계산식 ("가" / 3)
-                                            [주의] NaN === NaN --> false
-                                            NaN은 다른 모든 값과 비교(==, !=, ===, !==)했을 때 같지 않으며, 다른 NaN과도 같지 않습니다.
-                                            NaN의 판별은 Number.isNaN() 또는 isNaN()을 사용하면 제일 분명하게 수행할 수 있습니다.
-                                            아니면, 오로지 NaN만이 자기자신과 비교했을 때 같지 않음을 이용할 수도 있습니다.
-                                     */
+                       *NaN : 숫자가 아니라는 뜻인데, 연산결과가 잘못될 경우 NaN이라고 인식하기도 함
+                       1. 숫자로서 읽을 수 없음 (parseInt("어쩌구"), Number(undefined))
+                        2. 결과가 허수인 수학 계산식 (Math.sqrt(-1))
+                        3. 피연산자가 NaN (7 ** NaN)
+                        4. 정의할 수 없는 계산식 (0 * Infinity)
+                        5. 문자열을 포함하면서 덧셈이 아닌 계산식 ("가" / 3)
+                        [주의] NaN === NaN --> false
+                        NaN은 다른 모든 값과 비교(==, !=, ===, !==)했을 때 같지 않으며, 다른 NaN과도 같지 않습니다.
+                        NaN의 판별은 Number.isNaN() 또는 isNaN()을 사용하면 제일 분명하게 수행할 수 있습니다.
+                        아니면, 오로지 NaN만이 자기자신과 비교했을 때 같지 않음을 이용할 수도 있습니다.
+                 */
         $.getJSON(
             "/replies/pages/"+bno+"/"+page+".json"
             ,function(data){
@@ -85,15 +85,36 @@ var replyService = (function(){
         });
     }//remove
 
+
+    //[4] 댓글수정
+    function update(reply, callback, error){
+        console.log("수정할 댓글 RNO : "+reply.rno);
+
+        $.ajax({
+             type : 'put'
+            ,url : '/replies/'+reply.rno
+            ,data : JSON.stringify(reply)
+            ,contentType: "application/json; charset=utf-8"
+            ,success : function(result, status, xhr){
+                if(callback){callback(result)}
+             }
+            ,error : function(xhr, status, er){
+                 if(error){error(er)}
+             }
+        });
+    }//update
+
+
+
     // replyService 의 최종 리턴값 : 각 함수 실행 결과값을 담아서 리턴한다. ---> 함수가 아니라 값을 리턴하는게 [즉시실행함수]의 문법,
     //                       여기서는 add함수 자체를 객체로 리턴하는 것 ---> add()가 아니라 add, getList()가 아니라 getList
     return {
          add:add           //데이터전송타입이 application/json이고, 파라미터로 callback과 error를 함수로 받는 함수(를 Obj로 리턴, 즉시실행함수라서)
         ,getList : getList //param이라는 객체를 통해서 필요한 파라미터를 전달받아 JSON목록을 호출하는 함수(를 Obj로 리턴, 즉시실행함수라서)
         ,remove : remove
+        ,update : update
     };
-
-
+//최종 리턴값 : add, getList, remove, update
 
 })();
 

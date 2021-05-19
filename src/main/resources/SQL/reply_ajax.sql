@@ -22,6 +22,7 @@ FOREIGN KEY (BNO) REFERENCES TBL_BOARD(BNO);
 
 --확인
 select * from TBL_REPLY where BNO=425999;
+select * from TBL_REPLY where rno=20;
 
 commit ;
 
@@ -38,4 +39,10 @@ WHERE ROWNUM <= 20;
         425991
 */
 
+----
 
+--글번호로 확인
+select * from TBL_REPLY where BNO=425999;
+
+--댓글번호로 확인
+select * from TBL_REPLY where rno=20;
