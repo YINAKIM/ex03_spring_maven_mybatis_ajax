@@ -7,8 +7,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.zerock.domain.Criteria;
 import org.zerock.domain.ReplyVO;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 @RunWith(SpringRunner.class)
@@ -99,5 +101,16 @@ public class ReplyMapperTests {
         int count = mapper.update(vo);
         log.info("UPDATE COUNT : "+ count);
     }
+
+    // [mapper.java]에서 @Param으로 선언한 @Param("bno") ---> [mapper.xml]에서 파라미터 받는 #{bno} : 매칭된다는 것에 주목
+    @Test
+    public void testList(){
+        Criteria cri = new Criteria();
+
+        List<ReplyVO> replies = mapper.getListWithPaging(cri, bnoArr[0]); //425999L
+        replies.forEach(reply -> log.info(reply));
+    }
+
+
 
 }

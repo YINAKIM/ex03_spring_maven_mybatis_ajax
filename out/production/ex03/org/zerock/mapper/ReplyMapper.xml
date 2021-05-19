@@ -31,4 +31,18 @@
         WHERE RNO = #{rno}
     </update>
 
+
+<!--  @Param 이용하여 선언한 bno 파라미터 여기서 #{bno}로 매칭   -->
+    <select id="getListWithPaging" resultType="org.zerock.domain.ReplyVO">
+        SELECT
+             RNO
+            ,BNO
+            ,REPLY
+            ,REPLYER
+            ,REPLYDATE
+            ,UPDATEDATE
+        FROM TBL_REPLY
+        WHERE BNO = #{bno}
+        ORDER BY RNO ASC
+    </select>
 </mapper>
