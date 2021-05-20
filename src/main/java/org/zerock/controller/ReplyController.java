@@ -70,7 +70,8 @@ public class ReplyController {
     //{rno}받아서 댓글 삭제 --> 똑같이 "/{rno}"로 요청들어오는데 삭제할 수 있는 이유?
 
     @GetMapping(value = "/{rno}",
-            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+            produces = {MediaType.APPLICATION_XML_VALUE
+                    ,MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ReplyVO> get(@PathVariable("rno") Long rno){
         log.info("getMapping으로 들어옴 ---------- get: "+rno);
 

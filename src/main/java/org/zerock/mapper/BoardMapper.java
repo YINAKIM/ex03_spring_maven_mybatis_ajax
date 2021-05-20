@@ -2,6 +2,7 @@ package org.zerock.mapper;
 
 
 
+import org.springframework.stereotype.Repository;
 import org.zerock.domain.BoardVO;
 import org.zerock.domain.Criteria;
 

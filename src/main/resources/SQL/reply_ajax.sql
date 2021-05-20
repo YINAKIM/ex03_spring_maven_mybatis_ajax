@@ -44,5 +44,6 @@ WHERE ROWNUM <= 20;
 --글번호로 확인
 select * from TBL_REPLY where BNO=425999;
 
+
 --댓글번호로 확인
-select * from TBL_REPLY where rno=20;
+select * from TBL_REPLY where rno=22;
