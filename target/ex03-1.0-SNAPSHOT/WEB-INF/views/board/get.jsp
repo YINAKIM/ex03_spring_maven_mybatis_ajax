@@ -175,14 +175,83 @@
 
                                     modal.find("input").val();
                                     modal.modal("hide");
+
+                                    showList(1); //댓글 추가이후 1페이지로 새로 보내줘야 추가된 댓글이 출력됨
                                 });//add
                             });//modalRegisterBtn클릭
 
                         }); //댓글추가Btn
 
-                        /* 2. 댓글 등록 / 목록갱신 */
+                        /* 2. 댓글의 클릭이벤트 처리
+                        * [댓글의 클릭이벤트 처리 : 이벤트 위임 ]
+                        * DOM에서 이벤트리스너를 등록하는 것은 반드시 해당 DOM요소가 존재해야만 가능하다.
+                        * 그런데! Ajax로 <li>태그들이 만들어지면
+                        * ==> 이후에 이벤트를 등록해야하기 때문에 => 이벤트 위임의 형태로 작성 (위임:delegation)
+                        *
+                        * [이벤트 위임]
+                        * 1. 이미 존재하는 요소에 이벤트를 걸어준다.
+                        * 2. 나중에 이벤트의 대상을 변경해준다.
+                        * -> on()을 이용, 동적으로 생기는 요소들에 대해 파라미터 형식으로 지정한다
+                        *
+                        * [결과]
+                        * 처음 이벤트 걸었던 대상에 이벤트가 걸리지 않고 이벤트의 주인공은 on()에 파라미터로 들어간 실제이벤트 대상이 된다.
+                        *  */
+
+                        $(".chat").on("click","li",function(e){ // => 파라미터 형식으로 등러간 li가 실제 이벤트 걸리는 대상
+                            var rno = $(this).data("rno");  //실제 이벤트 대상인 rno의 this -> li
+                            console.log("###이벤트 실제 대상이 되는 li의 rno = "+rno);
+                        /*
+                        get?pageNum=1&amount=10&keyword=&type=&bno=425990:577 ###이벤트 실제 대상이 되는 li의 rno = 40
+                        get?pageNum=1&amount=10&keyword=&type=&bno=425990:577 ###이벤트 실제 대상이 되는 li의 rno = 39
+                        get?pageNum=1&amount=10&keyword=&type=&bno=425990:577 ###이벤트 실제 대상이 되는 li의 rno = 38
+                        */
+                            replyService.get(rno,function (reply) {
+                                modalInputReply.val(reply.reply);
+                                modalInputReplyer.val(reply.replyer);
+                                modalInputReplyDate.val( replyService.displayTime(reply.replyDate))  // 시간은 formatting된 것으로
+                                    .attr("readonly","readonly");
+
+                                modal.data("rno",reply.rno);
+
+                                modal.find("button[id != 'modalCloseBtn']").hide();
+                                modalModBtn.show();
+                                modalRemoveBtn.show();
+
+                                $(".modal").modal("show");
+
+                            });//get
 
 
+
+                        });//on() : 클릭한li에 이벤트 위임
+
+
+
+                        /* 3. 댓글 등록 / 목록갱신 */
+                        modalModBtn.on("click",function(e){
+                            // reply Obj
+                            var reply = {
+                                 rno : modal.data("rno")
+                                ,reply : modalInputReply.val()
+                            };
+
+                            replyService.update(reply,function(result){
+                                alert(result);
+                                modal.modal("hide");
+                                showList(1);
+                            }); //update
+                        });//modalModBtn누르면
+
+                        /* 4. 댓글삭제 */
+                        modalRemoveBtn.on("click",function(result){
+                            var rno = modal.data("rno");
+
+                            replyService.remove(rno,function(result){
+                                alert(result);
+                                modal.modal("hide");
+                                showList(1);
+                            });
+                        }); //modalRemoveBtn
 
 
                         // [1] replyService Obj에서 add함수 테스트
