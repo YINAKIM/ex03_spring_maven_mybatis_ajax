@@ -6,3 +6,8 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+
+# 이나작성
+*.class
+/target/
+/out/
