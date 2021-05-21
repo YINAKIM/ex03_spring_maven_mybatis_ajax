@@ -111,6 +111,13 @@ public class ReplyMapperTests {
         replies.forEach(reply -> log.info(reply));
     }
 
+    @Test
+    public void tsetList2(){
+        Criteria cri = new Criteria(2,10);
 
+        // bno=425999L 로 2페이지에 해당되는 댓글 나오나 확인
+        List<ReplyVO> replies = mapper.getListWithPaging(cri, 425999L);
+        replies.forEach(reply->log.info(reply));
+    }
 
 }
